@@ -1,6 +1,8 @@
-package msgrouter
+package router
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"github.com/bwmarrin/discordgo"
+)
 
 type Route struct {
 	Name        string
@@ -13,8 +15,7 @@ type Route struct {
 
 type RouteHandler func(*Context, []string)
 
-
-func NewRouter(prefix string) *Route {
+func NewMessageRouter(prefix string) *Route {
 	return &Route{Name: prefix}
 }
 

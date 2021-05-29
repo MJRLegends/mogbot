@@ -1,4 +1,4 @@
-package slashrouter
+package router
 
 import (
 	"log"

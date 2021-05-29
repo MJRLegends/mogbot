@@ -1,33 +1,27 @@
-package slashrouter
+package router
 
 import (
 	"log"
-	"os"
-	"os/signal"
 
 	"github.com/bwmarrin/discordgo"
 )
 
-type Router struct {
-	*discordgo.Session
-	CommandHandlers map[string]CommandHandler
+type SlashRouter map[string]SlashCommandHandler
+
+type SlashCommandHandler func(*Context)
+
+func NewSlashRouter() SlashRouter {
+	return make(map[string]SlashCommandHandler)
 }
 
 type Context struct {
 	*discordgo.Session
+	*discordgo.Message
 	*discordgo.Interaction
 	Vars map[string]interface{}
 }
 
-type CommandHandler func(*Context)
 
-func NewRouter(token string) *Router {
-	session, err := discordgo.New("Bot " + token)
-	if err != nil {
-		log.Fatalf("Invalid bot parameters: %v", err)
-	}
-	return &Router{Session: session, CommandHandlers: make(map[string]CommandHandler)}
-}
 
 func (r *Router) AddCommands(guildID string, cmds ...*discordgo.ApplicationCommand) {
 	oldCmds, err := r.ApplicationCommands(r.State.User.ID, guildID)
@@ -58,10 +52,4 @@ func (r *Router) Start(s *discordgo.Session, v map[string]interface{}) {
 	log.Print("Added router handler to session")
 }
 
-func (r *Router) Wait() {
-	sigs := make(chan os.Signal)
-	signal.Notify(sigs, os.Interrupt)
-	<-sigs
-	log.Print("Shutting down gracefully.")
-	r.Close()
-}
+

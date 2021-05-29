@@ -1,16 +1,34 @@
 package mogbot
 
 import (
-	"github.com/captainmog/mogbot/pkg/routercord/slashrouter"
+	"github.com/bwmarrin/discordgo"
+	"log"
+	"os"
+	"os/signal"
 )
 
 type Bot struct {
-	*slashrouter.Router
+	*discordgo.Session
 	DB Database
+	Plugins []Plugin
 }
 
 type Handler func(*Bot) interface{}
 
 func NewBot(token string, db Database) *Bot {
-	return &Bot{slashrouter.NewRouter(token), db}
+	s, err := discordgo.New("Bot " + token)
+	if err != nil {
+		panic(err)
+	}
+	return &Bot{Session: s, DB: db}
+}
+
+func (b *Bot) Wait() {
+	sigs := make(chan os.Signal)
+	signal.Notify(sigs, os.Interrupt)
+	<-sigs
+	log.Print("Shutting down gracefully...")
+	if err := b.Close(); err != nil {
+		panic(err)
+	}
 }
