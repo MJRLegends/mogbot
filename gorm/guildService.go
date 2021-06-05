@@ -39,9 +39,8 @@ func (s *GuildService) GetAllGuilds() ([]mogbot.Guild, error) {
 	return guilds, nil
 }
 
-func (s *GuildService) UpdateGuild(fields map[string]interface{}) error {
-	var g *mogbot.Guild
-	s.Model(g).Updates(fields)
+func (s *GuildService) UpdateGuild(guildID string, fields map[string]interface{}) error {
+	s.Where(&mogbot.Guild{ID: guildID}).Updates(fields)
 	return nil
 }
 

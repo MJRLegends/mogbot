@@ -21,6 +21,16 @@ type GuildService interface {
 	AddGuild(*Guild) error
 	GetGuild(string) (*Guild, error)
 	GetAllGuilds() ([]Guild, error)
-	UpdateGuild(map[string]interface{}) error
+	UpdateGuild(string, map[string]interface{}) error
 	RemoveGuild(string) error
+}
+
+func (g *Guild) FillStruct(f map[string]interface{}) error {
+	for k, v := range f {
+		err := SetField(g, k, v)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

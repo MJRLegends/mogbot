@@ -40,9 +40,12 @@ func (s *MemberService) GetGuildMembers(gid string) ([]*mogbot.Member, error) {
 	return members, nil
 }
 
-func (s *MemberService) UpdateMember(fields map[string]interface{}) error {
+func (s *MemberService) UpdateMember(userID, guildID string, fields map[string]interface{}) error {
 	var m *mogbot.Member
-	s.Model(m).Updates(fields)
+	if r := s.Model(m).Updates(fields); r.Error != nil {
+		log.Printf("Error updating user '%s' in guild '%s': %s", userID, guildID, r.Error)
+		return r.Error
+	}
 	return nil
 }
 

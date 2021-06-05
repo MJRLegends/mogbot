@@ -2,6 +2,9 @@ package main
 
 import (
 	"flag"
+	"fmt"
+
+	"github.com/ChrisMcDearman/mogbot/handlers"
 
 	"github.com/ChrisMcDearman/mogbot/router"
 
@@ -26,11 +29,11 @@ func main() {
 	if err := godotenv.Load(".env"); err != nil {
 		panic(err)
 	}
-	token := os.Getenv("TOKEN")
+	token := os.Getenv("PROD")
 	if token == "" {
 		log.Fatal("Bot token was not given.")
 	}
-	f := flag.String("dbmode", "DEV", "-dbmode=DEV")
+	f := flag.String("dbmode", "DEV_DB", "-dbmode=DEV_DB")
 	flag.Parse()
 	if *f == "" {
 		log.Fatal("DB mode was not given.")
@@ -45,13 +48,16 @@ func main() {
 		commands.Echo,
 	)
 	b.Identify.Intents = discordgo.IntentsAll
-	for _, h := range Handlers {
+	for _, h := range handlers.Handlers {
 		b.AddHandler(h(b))
 	}
-	v := make(map[string]interface{})
+	v := make(map[interface{}]interface{})
 	v["db"] = b.DB
 	b.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) {
-		b.Execute(b.Session, router.NewDefaultPrefixer("!"), m.Message, v)
+		if err := b.Execute(b.Session, router.NewDefaultParser(), router.NewDefaultPrefixer("!"), m, v); err != nil {
+			log.Printf("Command error: %s", err)
+			_, _ = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Error invoking command: %s", err))
+		}
 	})
 	if err := b.Open(); err != nil {
 		panic(err)

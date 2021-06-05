@@ -1,9 +1,12 @@
 package mogbot
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
+	"reflect"
 
 	"github.com/ChrisMcDearman/mogbot/router"
 
@@ -36,4 +39,26 @@ func (b *Bot) Wait() {
 	if err := b.Close(); err != nil {
 		panic(err)
 	}
+}
+
+func SetField(obj interface{}, name string, value interface{}) error {
+	structValue := reflect.ValueOf(obj).Elem()
+	structFieldValue := structValue.FieldByName(name)
+
+	if !structFieldValue.IsValid() {
+		return fmt.Errorf("No such field: %s in obj", name)
+	}
+
+	if !structFieldValue.CanSet() {
+		return fmt.Errorf("Cannot set %s field value", name)
+	}
+
+	structFieldType := structFieldValue.Type()
+	val := reflect.ValueOf(value)
+	if structFieldType != val.Type() {
+		return errors.New("Provided value type didn't match obj field type")
+	}
+
+	structFieldValue.Set(val)
+	return nil
 }

@@ -3,6 +3,8 @@ package cache
 import (
 	"log"
 
+	"github.com/pkg/errors"
+
 	"github.com/ChrisMcDearman/mogbot/mogbot"
 
 	lru "github.com/hashicorp/golang-lru"
@@ -47,10 +49,17 @@ func (s *MemberService) GetMember(userID, guildID string) (*mogbot.Member, error
 	return &m, nil
 }
 
-func (s *MemberService) UpdateMember(new *mogbot.Member) error {
-	s.Remove(new.UserID + new.GuildID)
-	s.Add(new.UserID+new.GuildID, *new)
-	return s.MemberService.UpdateMember(new)
+func (s *MemberService) UpdateMember(userID, guildID string, fields map[string]interface{}) error {
+	s.Remove(userID + guildID)
+	v, ok := s.Get(userID + guildID)
+	if !ok {
+		return errors.New("")
+	}
+	t, _ := v.(*mogbot.Member)
+	if err := t.FillStruct(fields); err != nil {
+		return err
+	}
+	return s.MemberService.UpdateMember(userID, guildID, fields)
 }
 
 func (s *MemberService) RemoveMember(userID, guildID string) error {

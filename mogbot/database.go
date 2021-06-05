@@ -2,6 +2,6 @@ package mogbot
 
 type Database interface {
 	GuildService
-	//MemberService
+	MemberService
 	//RoleService
 }

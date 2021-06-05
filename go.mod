@@ -9,6 +9,8 @@ require (
 	github.com/jackc/pgx/v4 v4.11.0 // indirect
 	github.com/joho/godotenv v1.3.0
 	github.com/lib/pq v1.10.0 // indirect
+	github.com/mattn/go-shellwords v1.0.11
+	github.com/pkg/errors v0.8.1
 	golang.org/x/crypto v0.0.0-20210421170649-83a5a9bb288b // indirect
 	golang.org/x/text v0.3.6 // indirect
 	gorm.io/driver/postgres v1.0.8

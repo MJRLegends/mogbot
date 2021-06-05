@@ -10,7 +10,8 @@ import (
 var Ping = &router.Route{
 	Name:        "ping",
 	Description: "Pings the bot. Responds with pong and latency.",
-	Handler: func(ctx *router.Context, args []string) {
-		ctx.ChannelMessageSend(ctx.Message.ChannelID, fmt.Sprintf("Pong %dms!", ctx.HeartbeatLatency()/time.Millisecond))
+	Handler: func(ctx *router.Context, args []string) error {
+		_, err := ctx.ChannelMessageSend(ctx.Message.ChannelID, fmt.Sprintf("Pong %dms!", ctx.HeartbeatLatency()/time.Millisecond))
+		return err
 	},
 }

@@ -2,14 +2,16 @@ package router
 
 import (
 	"strings"
+
+	"github.com/bwmarrin/discordgo"
 )
 
-type Prefixer func(ctx Context) (prefix string, ok bool)
+type Prefixer func(*discordgo.MessageCreate) (prefix string, ok bool)
 
 func NewDefaultPrefixer(prefixes ...string) Prefixer {
-	return func(ctx Context) (prefix string, ok bool) {
+	return func(m *discordgo.MessageCreate) (prefix string, ok bool) {
 		for _, p := range prefixes {
-			if strings.HasPrefix(ctx.Content, p) {
+			if strings.HasPrefix(m.Content, p) {
 				return p, true
 			}
 		}
@@ -18,10 +20,10 @@ func NewDefaultPrefixer(prefixes ...string) Prefixer {
 }
 
 func NewGuildPrefixer(prefixes map[string][]string) Prefixer {
-	return func(ctx Context) (prefix string, ok bool) {
-		if gp, ok := prefixes[ctx.Message.GuildID]; ok {
+	return func(m *discordgo.MessageCreate) (prefix string, ok bool) {
+		if gp, ok := prefixes[m.GuildID]; ok {
 			for _, p := range gp {
-				if strings.HasPrefix(ctx.Content, p) {
+				if strings.HasPrefix(m.Content, p) {
 					return p, true
 				}
 			}
