@@ -10,7 +10,7 @@ type MemberService interface {
 	AddMember(*Member) error
 	GetMember(string, string) (*Member, error)
 	GetGuildMembers(string) ([]*Member, error)
-	UpdateMember(string, string, map[string]interface{}) error
+	UpdateMember(string, string, map[string]interface{}) (*Member, error)
 	RemoveMember(string, string) error
 }
 

@@ -40,13 +40,13 @@ func (s *MemberService) GetGuildMembers(gid string) ([]*mogbot.Member, error) {
 	return members, nil
 }
 
-func (s *MemberService) UpdateMember(userID, guildID string, fields map[string]interface{}) error {
-	var m *mogbot.Member
+func (s *MemberService) UpdateMember(userID, guildID string, fields map[string]interface{}) (*mogbot.Member, error) {
+	m := &mogbot.Member{UserID: userID, GuildID: guildID}
 	if r := s.Model(m).Updates(fields); r.Error != nil {
 		log.Printf("Error updating user '%s' in guild '%s': %s", userID, guildID, r.Error)
-		return r.Error
+		return m, r.Error
 	}
-	return nil
+	return m, nil
 }
 
 func (s *MemberService) RemoveMember(uid, gid string) error {
