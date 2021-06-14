@@ -44,8 +44,8 @@ func main() {
 	}
 	b := mogbot.New(token, cache.New(256, db))
 	b.AddRoutes(
-		commands.Ping,
-		commands.Echo,
+		commands.Ping(),
+		commands.Echo(),
 	)
 	b.Identify.Intents = discordgo.IntentsAll
 	for _, h := range handlers.Handlers {
