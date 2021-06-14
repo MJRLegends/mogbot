@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/ChrisMcDearman/mogbot/router"
+	"github.com/ChrisMcDearman/mogbot/pkg/router"
 )
 
 func Echo() *router.Route {

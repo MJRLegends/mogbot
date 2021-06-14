@@ -1,4 +1,4 @@
-package main
+package internal
 
 //// CommandHandlers is a slice of all my command handlers
 //var CommandHandlers = map[string]router.SlashCommandHandler{

@@ -1,6 +1,6 @@
 package commands
 
-import "github.com/ChrisMcDearman/mogbot/router"
+import "github.com/ChrisMcDearman/mogbot/pkg/router"
 
 func Soundboard() *router.Route {
 	var soundboard = &router.Route{

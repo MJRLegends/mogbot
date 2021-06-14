@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"fmt"
+	"github.com/ChrisMcDearman/mogbot/internal/mogbot"
 	"log"
 
-	"github.com/ChrisMcDearman/mogbot/mogbot"
 
 	"github.com/bwmarrin/discordgo"
 )

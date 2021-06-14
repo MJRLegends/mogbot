@@ -1,7 +1,7 @@
 package cache
 
 import (
-	"github.com/ChrisMcDearman/mogbot/mogbot"
+	"github.com/ChrisMcDearman/mogbot/internal/mogbot"
 )
 
 type Cache struct {

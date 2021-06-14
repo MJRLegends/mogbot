@@ -3,7 +3,7 @@ package gorm
 import (
 	"log"
 
-	mogbot "github.com/ChrisMcDearman/mogbot/mogbot"
+	"github.com/ChrisMcDearman/mogbot/internal/mogbot"
 
 	"gorm.io/gorm"
 )

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/ChrisMcDearman/mogbot/router"
+	"github.com/ChrisMcDearman/mogbot/pkg/router"
 )
 
 func Ping() *router.Route {

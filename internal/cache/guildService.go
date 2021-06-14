@@ -3,7 +3,7 @@ package cache
 import (
 	"log"
 
-	"github.com/ChrisMcDearman/mogbot/mogbot"
+	"github.com/ChrisMcDearman/mogbot/internal/mogbot"
 	lru "github.com/hashicorp/golang-lru"
 	"github.com/pkg/errors"
 )
