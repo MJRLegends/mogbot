@@ -22,7 +22,8 @@ func Play() *router.Route {
 		Aliases:     []string{"p"},
 		Description: "Plays a sound on the soundboard",
 		Handler: func(ctx *router.Context, args []string) error {
-			sb := ctx.Vars["player"]
+			//sb := ctx.Vars["player"]
+			return nil
 		},
 	}
 }
