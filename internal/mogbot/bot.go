@@ -8,7 +8,7 @@ import (
 	"os/signal"
 	"reflect"
 
-	"github.com/ChrisMcDearman/mogbot/router"
+	"github.com/ChrisMcDearman/mogbot/pkg/router"
 
 	"github.com/bwmarrin/discordgo"
 )

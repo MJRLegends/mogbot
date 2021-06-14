@@ -3,14 +3,16 @@ package main
 import (
 	"flag"
 	"fmt"
-	cache2 "github.com/ChrisMcDearman/mogbot/internal/cache"
-	commands2 "github.com/ChrisMcDearman/mogbot/internal/commands"
-	gorm2 "github.com/ChrisMcDearman/mogbot/internal/gorm"
-	handlers2 "github.com/ChrisMcDearman/mogbot/internal/handlers"
 
-	"github.com/ChrisMcDearman/mogbot/router"
+	"github.com/ChrisMcDearman/mogbot/internal/commands"
+	"github.com/ChrisMcDearman/mogbot/internal/handlers"
 
-	"github.com/ChrisMcDearman/mogbot/mogbot"
+	"github.com/ChrisMcDearman/mogbot/internal/cache"
+	"github.com/ChrisMcDearman/mogbot/internal/gorm"
+
+	"github.com/ChrisMcDearman/mogbot/pkg/router"
+
+	"github.com/ChrisMcDearman/mogbot/internal/mogbot"
 
 	"github.com/bwmarrin/discordgo"
 
@@ -34,17 +36,17 @@ func main() {
 	if *f == "" {
 		log.Fatal("DB mode was not given.")
 	}
-	db, err := gorm2.NewConnection(*f)
+	db, err := gorm.NewConnection(*f)
 	if err != nil {
 		panic(err)
 	}
-	b := mogbot.New(token, cache2.New(256, db))
+	b := mogbot.New(token, cache.New(256, db))
 	b.AddRoutes(
-		commands2.Ping(),
-		commands2.Echo(),
+		commands.Ping(),
+		commands.Echo(),
 	)
 	b.Identify.Intents = discordgo.IntentsAll
-	for _, h := range handlers2.Handlers {
+	for _, h := range handlers.Handlers {
 		b.AddHandler(h(b))
 	}
 	v := make(map[interface{}]interface{})
