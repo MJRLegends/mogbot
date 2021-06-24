@@ -5,7 +5,6 @@ import (
 
 	"github.com/ChrisMcDearman/mogbot/internal/mogbot"
 	lru "github.com/hashicorp/golang-lru"
-	"github.com/pkg/errors"
 )
 
 type GuildService struct {
@@ -47,21 +46,11 @@ func (s *GuildService) GetGuild(id string) (*mogbot.Guild, error) {
 	return g, nil
 }
 
-//func (s *GuildService) GetAllGuilds() ([]mogbot.Guild, error) {
-//	return s.GuildService.GetAllGuilds()
-//}
-
-func (s *GuildService) UpdateGuild(guildID string, fields map[string]interface{}) error {
+func (s *GuildService) UpdateGuild(guildID string, fields map[string]interface{}) (*mogbot.Guild, error) {
+	g, err := s.GuildService.UpdateGuild(guildID, fields)
 	s.Remove(guildID)
-	v, ok := s.Get(guildID)
-	if !ok {
-		return errors.New("")
-	}
-	t, _ := v.(*mogbot.Guild)
-	if err := t.FillStruct(fields); err != nil {
-		return err
-	}
-	return s.GuildService.UpdateGuild(guildID, fields)
+	s.Add(guildID, g)
+	return g, err
 }
 
 func (s *GuildService) RemoveGuild(guildID string) error {

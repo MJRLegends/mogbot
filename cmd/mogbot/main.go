@@ -4,10 +4,11 @@ import (
 	"flag"
 	"fmt"
 
+	"github.com/ChrisMcDearman/mogbot/internal/cache"
+
 	"github.com/ChrisMcDearman/mogbot/internal/commands"
 	"github.com/ChrisMcDearman/mogbot/internal/handlers"
 
-	"github.com/ChrisMcDearman/mogbot/internal/cache"
 	"github.com/ChrisMcDearman/mogbot/internal/gorm"
 
 	"github.com/ChrisMcDearman/mogbot/pkg/router"
@@ -27,7 +28,7 @@ func main() {
 	if err := godotenv.Load(".env"); err != nil {
 		panic(err)
 	}
-	token := os.Getenv("PROD")
+	token := os.Getenv("TOKEN")
 	if token == "" {
 		log.Fatal("Bot token was not given.")
 	}
@@ -40,15 +41,13 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	b := mogbot.New(token, cache.New(256, db))
+	b := mogbot.New(token, cache.New(500, db))
 	b.AddRoutes(
 		commands.Ping(),
 		commands.Echo(),
 	)
+	b.AddHandler(handlers.OnReady(b))
 	b.Identify.Intents = discordgo.IntentsAll
-	for _, h := range handlers.Handlers {
-		b.AddHandler(h(b))
-	}
 	v := make(map[interface{}]interface{})
 	v["db"] = b.DB
 	b.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) {

@@ -4,23 +4,33 @@ import (
 	"log"
 	"os"
 
+	"github.com/ChrisMcDearman/mogbot/internal/mogbot"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-type DB struct {
-	*GuildService
-	*MemberService
+type Database struct {
+	*UserService
+	//*GuildService
+	//*MemberService
 }
 
-func NewConnection(source string) (*DB, error) {
+func NewConnection(source string) (*Database, error) {
 	db, err := gorm.Open(postgres.Open(os.Getenv(source)), &gorm.Config{})
 	if err != nil {
 		log.Printf("Error connecting to postgres db: %s", err)
 		return nil, err
 	}
-	return &DB{
-		&GuildService{db},
-		&MemberService{db},
+	db.AutoMigrate(
+		&mogbot.User{},
+		//&mogbot.Guild{},
+		//&mogbot.Member{},
+		//&mogbot.Role{},
+		//&mogbot.Log{},
+	)
+	return &Database{
+		&UserService{db},
+		//&GuildService{db},
+		//&MemberService{db},
 	}, nil
 }

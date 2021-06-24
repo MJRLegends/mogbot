@@ -1,6 +1,7 @@
 package mogbot
 
 type Member struct {
+	ID      int64
 	UserID  string `gorm:"primaryKey"`
 	GuildID string `gorm:"primaryKey"`
 	Roles   []Role
